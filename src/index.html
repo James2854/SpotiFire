@@ -4,9 +4,33 @@
     <meta charset="UTF-8">
     <title>Hello World!</title>
     <link rel="stylesheet" href="index.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> <!-- Allows for use of icons from google (https://google.github.io/material-design-icons/)-->
+  <script defer src="render.js"></script>
   </head>
   <body>
-    <h1>💖 Hello World!</h1>
-    <p>Welcome to your Electron application.</p>
+    <div id="Login" style="display: none;">
+      <p>test</p>
+    </div>
+    <div class="mainApp">
+      <div class="topBar">
+        <div class="titleBar">
+          <button id="showHideMenus" class="toggleButton material-icons md-light">menu</button>
+          <div class="title">
+            My app
+          </div>
+        </div>
+        <div class="titleBarBtns">
+          <button id="minimiseBtn" class="topBtn minimiseBtn material-icons md-light">minimize</button>
+          <button id="maximiseBtn" class="topBtn maximiseBtn material-icons md-light" >fullscreen</button>
+          <button id="closeBtn" class="topBtn closeBtn material-icons md-light">close</button>
+        </div>
+      </div>
+      <div class="contentArea">
+        <div id="mySidebar" class="leftMenu">
+        </div>
+        <div class="contentPages" id="contentPages">
+        </div>
+      </div>
+    </div>
   </body>
 </html>

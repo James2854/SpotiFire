@@ -1,15 +1,19 @@
-const { app, BrowserWindow, Menu, nativeImage, Tray } = require('electron')
+// Imports
+const { app, BrowserWindow, Menu, nativeImage, Tray, ipcMain} = require('electron');
+const { platform } = require('os');
 const path = require('path');
+const ipc = ipcMain
+// definitions of global scope variables
+let mainWindow;
+let tray = null;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
   app.quit();
 }
 
-
 // Function for the creation of a tray icon on app startup.
 // Since the app will be majority in the background, this stops it from fully closing when the X is hit.
-let tray = null
 function createTray () {
   const icon = path.join(__dirname, '/app.png') // required.
   const trayicon = nativeImage.createFromPath(icon)
@@ -18,7 +22,11 @@ function createTray () {
     {
       label: 'Show App',
       click: () => {
-        createWindow()
+        if (BrowserWindow.getAllWindows().length === 0) {
+          createWindow();
+        } else {
+          mainWindow.focus()
+        }
       }
     },
     {
@@ -33,22 +41,59 @@ function createTray () {
 }
 
 function createWindow () {
-
   if (!tray) { // if tray hasn't been created already.
-    createTray()
+    createTray();
   }
 
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+  mainWindow = new BrowserWindow({
+    width: 1200,
+    height: 940,
+    minHeight: 600,
+    minWidth: 800,
+    frame: false,
+    
+    webPreferences: {
+      nodeIntegration: true, // allow node processes
+      contextIsolation: false,
+      devTools: true, //allow the use of dev tools
+      preload: path.join(__dirname, "preload.js")
+    }
   });
-
-  // and load the index.html of the app.
+  // load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // Open the DevTools on startup.
+  //mainWindow.webContents.openDevTools();
+
+
+  // MAIN EVENT FUNCTIONS
+  // setup for background processing
+  mainWindow.on('closed', function () {
+    mainWindow = null
+  });
+
+  // closing app on event
+  ipc.on('closeApp', () => {
+    console.log('Close')
+    mainWindow.close()
+  })
+
+  // minimise window
+  ipc.on('minimiseApp', () => {
+    console.log('Minimise')
+    mainWindow.minimize()
+  })
+  ipc.on('fullscreenApp', () => {
+    console.log('Fullscreen')
+    if (mainWindow.isMaximized()) {
+      mainWindow.unmaximize();
+    } else {
+      mainWindow.maximize();
+    }
+  })
+
+
 };
 
 // This method will be called when Electron has finished
@@ -56,14 +101,14 @@ function createWindow () {
 // Some APIs can only be used after this event occurs.
 app.on('ready', createWindow);
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
+// Hide when all windows are closed, allowing for background tasks to continue.
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
+  if (platform == "darwin"){
+    app.dock.hide()
   }
+  // any other logic
 });
+
 
 app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the

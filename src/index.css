@@ -1,6 +1,145 @@
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  margin: auto;
-  max-width: 38rem;
-  padding: 2rem;
+html, body {
+    margin: 0;
+    padding: 0;
+    font-size: 10pt;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #949AA7;
+    background-color: #2C313C;
+}
+
+.mainApp {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border: 1px solid #343B48;
+    -webkit-box-sizing: border-box;
+}
+
+.mainApp > .topBar {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 40px;
+    border-bottom: 3px solid #343B48;
+    background-color: #1B1D23;
+    -webkit-user-select: none;
+}
+
+.topBar > .titleBar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+.titleBar > .toggleButton {
+    width: 45px;
+    height: 40px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: 0.2S;
+    cursor: pointer;
+}
+
+.titleBar > .toggleButton:hover {
+    background-color: #272C36;
+}
+
+.titleBar > .toggleButton:active {
+    background-color: #4F9FEE;
+}
+
+.titleBar > img {
+    margin-left: 10px;
+}
+
+.titleBar > .title {
+    margin-left: 10px;
+    width: 100%;
+    line-height: 30px;
+    margin-top: 5px;
+    padding-bottom: 5px;
+    -webkit-app-region: drag;
+}
+
+.topBar > .titleBarBtns {
+    display: flex;
+    flex-direction: row;
+    width: 120px;
+    height: 40px;
+}
+
+.titleBarBtns > .topBtn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: 0.2S;
+    cursor: pointer;
+}
+
+.titleBarBtns > .topBar:hover {
+    /*background-color: #272C36;*/
+    background-color: #3f3f3f;
+}
+
+.titleBarBtns > .topBtn:active {
+    background-color: #4F9FEE;
+}
+
+
+/*
+ * EMPTY CSS RULESETS
+ * Used to contain background-image definitions before moving to using the material icons from google.
+*/
+
+.titleBarBtns > .minimiseBtn {
+}
+
+.titleBarBtns > .maximiseBtn {
+}
+
+.titleBarBtns > .restoreBtn {
+}
+
+.titleBarBtns > .closeBtn {
+    
+}
+.material-icons.md-dark { 
+    color: rgba(0, 0, 0, 0.54); 
+}
+
+.material-icons.md-light { 
+    color: rgba(255, 255, 255, 1); 
+}
+
+.mainApp > .contentArea {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+}
+
+.contentArea > .leftMenu {
+    width: 280px;
+    height: 100%;
+    background-color: #272C36;
+    transition: 0.4s;
+}
+
+.contentArea > .contentPages {
+    width: 100%;
+    height: 100%;
+    -webkit-box-align: center;
+    -webkit-box-pack: center;
+    display: -webkit-box;
 }
