@@ -1,11 +1,15 @@
 // Imports
 const { app, BrowserWindow, Menu, nativeImage, Tray, ipcMain} = require('electron');
+const { request } = require('http');
 const { platform } = require('os');
 const path = require('path');
+const {userAuthentication} =  require('./auth.js');
+
 const ipc = ipcMain
 // definitions of global scope variables
 let mainWindow;
 let tray = null;
+var spotifyToken;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -39,6 +43,8 @@ function createTray () {
 
   tray.setContextMenu(contextMenu)
 }
+
+
 
 function createWindow () {
   if (!tray) { // if tray hasn't been created already.
@@ -79,6 +85,11 @@ function createWindow () {
     mainWindow.close()
   })
 
+  ipc.on('showHideMenus', () => {
+    console.log('Show/Hide Menus')
+    userAuthentication();
+  })
+
   // minimise window
   ipc.on('minimiseApp', () => {
     console.log('Minimise')
@@ -93,8 +104,11 @@ function createWindow () {
     }
   })
 
-
 };
+
+// This method will be called when Electron has finished
+// initialization and is ready to create browser windows
+app.once('ready', userAuthentication);
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

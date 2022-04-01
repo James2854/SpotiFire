@@ -1,6 +1,5 @@
 // JS file for direct control over render process (index.html) rather then direct app control (index.js)
 
-// Enable the use of jQuery
 const { ipcRenderer } = require("electron")
 const ipc = ipcRenderer
 
@@ -19,4 +18,8 @@ minimiseBtn.addEventListener('click', ()=>{
 // Fullscreen App
 maximiseBtn.addEventListener('click', ()=>{
     ipc.send('fullscreenApp')
+})
+
+showHideMenus.addEventListener('click', ()=>{
+    ipc.send('showHideMenus')
 })
