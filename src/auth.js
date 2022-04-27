@@ -65,7 +65,7 @@ async function createAccessToken(params) {
 async function getAccessToken() {
   let tokenSet = JSON.parse(store.get('tokenSet'))
 
-  if (!tokenSet) return
+  if (!tokenSet) return false
 
   if (tokenSet.expires_at < Date.now()) {
     tokenSet = await createAccessToken({

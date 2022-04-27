@@ -1,9 +1,9 @@
 // Imports
-const { app, BrowserWindow, Menu, nativeImage, Tray, ipcMain} = require('electron');
+const { app, BrowserWindow, Menu, nativeImage, Tray, ipcMain, components} = require('electron');
 const { request } = require('http');
 const { platform } = require('os');
 const path = require('path');
-const {userAuthentication} =  require('./auth.js');
+const {userAuthentication, getAccessToken} =  require('./auth.js');
 
 const ipc = ipcMain
 // definitions of global scope variables
@@ -63,14 +63,20 @@ function createWindow () {
       nodeIntegration: true, // allow node processes
       contextIsolation: false,
       devTools: true, //allow the use of dev tools
+      plugins: true, // allow the use of plugins
       preload: path.join(__dirname, "preload.js")
     }
   });
   // load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
-
+  
+  
+  // test widevine CDM
+  //mainWindow.loadURL('https://shaka-player-demo.appspot.com/');
+  
+  
   // Open the DevTools on startup.
-  //mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 
 
   // MAIN EVENT FUNCTIONS
@@ -78,6 +84,19 @@ function createWindow () {
   mainWindow.on('closed', function () {
     mainWindow = null
   });
+  mainWindow.onSpotifyWebPlaybackSDKReady = () => {
+    const token = getAccessToken();
+    if (!token){
+      userAuthentication();
+      while (token === false) {
+        token = getAccessToken();
+      }
+    }
+    const player = new Spotify.Player({
+      name: 'SpotiFire Web Playback',
+      getOAuthToken: cb => { cb(token); }
+    });
+  }
 
   // closing app on event
   ipc.on('closeApp', () => {
@@ -104,17 +123,22 @@ function createWindow () {
       mainWindow.maximize();
     }
   })
-
 };
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows
-app.once('ready', userAuthentication);
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+app.whenReady().then(async () => {
+  await components.whenReady();
+  console.log('components ready:', components.status());
+  // This method will be called when Electron has finished
+  // initialization and is ready to create browser windows
+  //userAuthentication();
+
+  // This method will be called when Electron has finished
+  // initialization and is ready to create browser windows.
+  // Some APIs can only be used after this event occurs.
+  createWindow()
+  });
+
 
 // Hide when all windows are closed, allowing for background tasks to continue.
 app.on('window-all-closed', () => {
