@@ -87,7 +87,8 @@ function createWindow () {
 
   ipc.on('showHideMenus', () => {
     console.log('Show/Hide Menus')
-    userAuthentication();
+    mainWindow.loadFile(path.join(__dirname, 'spotify.html'))
+    //userAuthentication();
   })
 
   // minimise window
