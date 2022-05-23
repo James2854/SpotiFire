@@ -48,6 +48,7 @@ function createTray () {
 
 function createWindow () {
   if (!tray) { // if tray hasn't been created already.
+    console.log('tray created')
     createTray();
   }
 
@@ -84,19 +85,6 @@ function createWindow () {
   mainWindow.on('closed', function () {
     mainWindow = null
   });
-  mainWindow.onSpotifyWebPlaybackSDKReady = () => {
-    const token = getAccessToken();
-    if (!token){
-      userAuthentication();
-      while (token === false) {
-        token = getAccessToken();
-      }
-    }
-    const player = new Spotify.Player({
-      name: 'SpotiFire Web Playback',
-      getOAuthToken: cb => { cb(token); }
-    });
-  }
 
   // closing app on event
   ipc.on('closeApp', () => {

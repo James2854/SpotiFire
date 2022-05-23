@@ -1,7 +1,7 @@
 const crypto = require('crypto')
 const {BrowserWindow} = require('electron');
 const Store = require('electron-store');
-const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+//const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 store = new Store();
 
 

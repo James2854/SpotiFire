@@ -7,37 +7,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> <!-- Allows for use of icons from google (https://google.github.io/material-design-icons/)-->
   <script defer src="render.js"></script>
   <script src="https://sdk.scdn.co/spotify-player.js"></script>
-  <script>
-    window.onSpotifyWebPlaybackSDKReady = () => {
-      const token = 'BQDkzSog7kxWGpqDpJSJDetjcBtQZkfE55f-Oth4fTY2EyRw3tQF9qKcWkfe6V6OoW7EGkUFJfmrit8NvV1lWyHeva0_SHGZ9q8elR2tvkE0ktH_QmmEZoOOTIK0cARDdo3zVgFR_GLAq-79Qul-Y-aoHK5zigpIooPBCnvZ6siVKR9IgF5w0Cs';
-      const player = new Spotify.Player({
-        name: 'castLabs Web Playback SDK Player',
-        getOAuthToken: cb => { cb(token); }
-      });
-
-      // Error handling
-      player.addListener('initialization_error', ({ message }) => { console.error(message); });
-      player.addListener('authentication_error', ({ message }) => { console.error(message); });
-      player.addListener('account_error', ({ message }) => { console.error(message); });
-      player.addListener('playback_error', ({ message }) => { console.error(message); });
-
-      // Playback status updates
-      player.addListener('player_state_changed', state => { console.log(state); });
-
-      // Ready
-      player.addListener('ready', ({ device_id }) => {
-        console.log('Ready with Device ID', device_id);
-      });
-
-      // Not Ready
-      player.addListener('not_ready', ({ device_id }) => {
-        console.log('Device ID has gone offline', device_id);
-      });
-
-      // Connect to the player!
-      player.connect();
-    };
-  </script>
+  <script src="auth.js"></script>
   </head>
   <body>
     <div id="Login" style="display: none;">
