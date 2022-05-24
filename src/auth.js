@@ -1,7 +1,7 @@
 const crypto = require('crypto')
 const {BrowserWindow} = require('electron');
 const Store = require('electron-store');
-const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
+//const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 store = new Store();
 
 
@@ -65,7 +65,7 @@ async function createAccessToken(params) {
 async function getAccessToken() {
   let tokenSet = JSON.parse(store.get('tokenSet'))
 
-  if (!tokenSet) return
+  if (!tokenSet) return false
 
   if (tokenSet.expires_at < Date.now()) {
     tokenSet = await createAccessToken({
